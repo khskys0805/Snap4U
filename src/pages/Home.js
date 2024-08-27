@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import logo from "../imgs/logo.png";
+import { useNavigate } from "react-router-dom";
 
+// Box, Logo, Title, Buttons, Button 스타일은 그대로 유지합니다.
 const Box = styled.div`
 	background: ${(props) => props.color || "blue"};
 	width: 900px;
@@ -25,6 +27,7 @@ const Title = styled.h1`
 	font-size: 30px;
 	margin-bottom: 100px;
 `;
+
 const Buttons = styled.div`
 	display: flex;
 `;
@@ -44,7 +47,6 @@ const Button = styled.button`
 	transition: box-shadow 1s ease-in-out;
 	font-size: 18px;
 
-	/* & 문자를 사용하여 Sass 처럼 자기 자신 선택 가능 */
 	&:hover {
 		background: rgba(255, 255, 255, 0.9);
 		color: #000;
@@ -55,15 +57,24 @@ const Button = styled.button`
 	}
 `;
 
-const Home = () => (
-	<Box color="white">
-		<Logo />
-		<Title>당신을 위한 스냅을 기록해보세요.</Title>
-		<Buttons>
-			<Button>사진 찍기</Button>
-			<Button>갤러리</Button>
-		</Buttons>
-	</Box>
-);
+// Home 컴포넌트 정의
+const Home = () => {
+	const navigate = useNavigate();
+
+	const handleOnClick = () => {
+		navigate(`/cut`);
+	};
+
+	return (
+		<Box color="white">
+			<Logo />
+			<Title>당신을 위한 스냅을 기록해보세요.</Title>
+			<Buttons>
+				<Button onClick={handleOnClick}>사진 찍기</Button>
+				<Button>갤러리</Button>
+			</Buttons>
+		</Box>
+	);
+};
 
 export default Home;
