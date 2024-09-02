@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import logo from "../imgs/logo2.png";
+import { useNavigate } from "react-router-dom";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "blue"};
@@ -72,29 +73,36 @@ const GridItem2 = styled.div`
 	margin: 15px 0 0 15px;
 `;
 
-const Cut = () => (
-	<Box color="white">
-		<Title>사진 찍을 컷을 선택해주세요.</Title>
-		<Grids>
-			<Grid1>
-				<GridItem1 />
-				<GridItem1 />
-				<GridItem1 />
-				<GridItem1 />
-				<Logo />
-			</Grid1>
-			<Grid2>
-				<GridWrap>
-					<GridItem2 />
-					<GridItem2 />
-				</GridWrap>
-				<GridWrap>
-					<GridItem2 />
-					<GridItem2 />
-				</GridWrap>
-				<Logo />
-			</Grid2>
-		</Grids>
-	</Box>
-);
+const Cut = () => {
+	const navigate = useNavigate();
+
+	const handleChooseCut = () => {
+		navigate(`/camera`);
+	};
+	return (
+		<Box color="white">
+			<Title>사진 찍을 컷을 선택해주세요.</Title>
+			<Grids>
+				<Grid1 onClick={handleChooseCut}>
+					<GridItem1 />
+					<GridItem1 />
+					<GridItem1 />
+					<GridItem1 />
+					<Logo />
+				</Grid1>
+				<Grid2>
+					<GridWrap>
+						<GridItem2 />
+						<GridItem2 />
+					</GridWrap>
+					<GridWrap>
+						<GridItem2 />
+						<GridItem2 />
+					</GridWrap>
+					<Logo />
+				</Grid2>
+			</Grids>
+		</Box>
+	);
+};
 export default Cut;
