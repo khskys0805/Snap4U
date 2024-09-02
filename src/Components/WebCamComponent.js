@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import cameraClickSound from "../sounds/camera-click.mp3";
 
 const videoConstraints = {
-	width: 900,
-	height: 540,
+	width: 850,
+	height: 510,
 	facingMode: "user",
 };
 
@@ -30,6 +30,7 @@ const Container = styled.div`
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
+	height: inherit;
 	margin-top: 20px;
 `;
 
@@ -64,9 +65,9 @@ const WebCamComponent = ({ setPhotos }) => {
 		<Container>
 			<Webcam
 				audio={false}
-				height={540}
+				height={510}
 				screenshotFormat="image/jpeg"
-				width={900}
+				width={850}
 				videoConstraints={videoConstraints}
 				style={{ transform: "scaleX(-1)" }}
 				ref={webcamRef}
@@ -80,7 +81,7 @@ const WebCamComponent = ({ setPhotos }) => {
 					}
 				}}
 			>
-				<FaCamera size={"30px"} />
+				<FaCamera size={"25px"} />
 			</Button>
 			<Counter>찍힌 사진 수: {capturedPhotos.length} / 10</Counter>
 
