@@ -1,23 +1,30 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FaCircleCheck } from "react-icons/fa6";
+import {
+	TbCircleNumber1Filled,
+	TbCircleNumber2Filled,
+	TbCircleNumber3Filled,
+	TbCircleNumber4Filled,
+} from "react-icons/tb";
 
 const Title = styled.h2`
 	font-size: 25px;
 	margin-bottom: 50px;
 `;
-const StyledButton = styled.button`
-	background-color: #4caf50;
+
+const Button = styled.button`
+	background-color: #000;
 	border: none;
 	color: white;
-	padding: 10px 20px;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
 	font-size: 16px;
-	margin: 10px;
+	margin: 20px auto;
+	width: 65px;
+	height: 65px;
 	cursor: pointer;
-	border-radius: 4px;
+	border-radius: 50%;
 `;
 
 const Container = styled.div`
@@ -50,7 +57,7 @@ const Thumbnail = styled.div`
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.7); /* 반투명한 검은색 오버레이 */
+		background-color: rgba(0, 0, 0, 0.7);
 		opacity: ${(props) => (props.selected ? 1 : 0)};
 		transition: opacity 0.3s ease;
 	}
@@ -61,13 +68,20 @@ const PhotoImage = styled.img`
 	display: block;
 `;
 
-const CheckIcon = styled(FaCircleCheck)`
+const icons = [
+	TbCircleNumber1Filled,
+	TbCircleNumber2Filled,
+	TbCircleNumber3Filled,
+	TbCircleNumber4Filled,
+];
+
+const CheckIcon = styled.div`
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%) scaleX(-1);
 	color: white;
-	font-size: 30px;
+	font-size: 40px;
 	opacity: ${(props) => (props.selected ? 1 : 0)};
 	transition: opacity 0.3s ease;
 	z-index: 2;
@@ -77,11 +91,20 @@ const PhotoSelection = ({ photos }) => {
 	const [selectedPhotos, setSelectedPhotos] = useState([]);
 
 	const toggleSelectPhoto = (photo) => {
-		if (selectedPhotos.includes(photo)) {
-			setSelectedPhotos(selectedPhotos.filter((p) => p !== photo));
+		const selectedIndex = selectedPhotos.findIndex(
+			(selected) => selected.url === photo
+		);
+
+		if (selectedIndex !== -1) {
+			const newSelection = [...selectedPhotos];
+			newSelection.splice(selectedIndex, 1);
+			setSelectedPhotos(newSelection);
 		} else {
 			if (selectedPhotos.length < 4) {
-				setSelectedPhotos([...selectedPhotos, photo]);
+				setSelectedPhotos([
+					...selectedPhotos,
+					{ url: photo, order: selectedPhotos.length },
+				]);
 			} else {
 				alert("사진은 4장까지 선택이 가능합니다.");
 			}
@@ -95,29 +118,40 @@ const PhotoSelection = ({ photos }) => {
 			alert("4개의 사진을 선택해주세요.");
 		}
 	};
+
 	return (
 		<Container>
 			<Title>사진 4장을 선택해주세요.</Title>
 			<PhotoGrid>
-				{photos.map((photo, index) => (
-					<Thumbnail
-						key={index}
-						selected={selectedPhotos.includes(photo)}
-						onClick={() => toggleSelectPhoto(photo)}
-					>
-						<PhotoImage
-							src={photo}
-							alt={`Thumbnail ${index + 1}`}
-						/>
-						<CheckIcon selected={selectedPhotos.includes(photo)} />
-					</Thumbnail>
-				))}
+				{photos.map((photo, index) => {
+					const selectedIndex = selectedPhotos.findIndex(
+						(selected) => selected.url === photo
+					);
+					const SelectedIcon = icons[selectedIndex];
+
+					return (
+						<Thumbnail
+							key={index}
+							selected={selectedIndex !== -1}
+							onClick={() => toggleSelectPhoto(photo)}
+						>
+							<PhotoImage
+								src={photo}
+								alt={`Thumbnail ${index + 1}`}
+							/>
+							{selectedIndex !== -1 && (
+								<CheckIcon selected={selectedIndex !== -1}>
+									<SelectedIcon />
+								</CheckIcon>
+							)}
+						</Thumbnail>
+					);
+				})}
 			</PhotoGrid>
 
-			<StyledButton onClick={saveSelectedPhotos}>
-				Save Selected Photos
-			</StyledButton>
+			<Button onClick={saveSelectedPhotos}>다음</Button>
 		</Container>
 	);
 };
+
 export default PhotoSelection;
