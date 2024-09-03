@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 // Box, Logo, Title, Buttons, Button 스타일은 그대로 유지합니다.
 const Box = styled.div`
-	background: ${(props) => props.color || "blue"};
+	background: ${(props) => props.color || "#fff"};
 	width: 900px;
 	height: 100%;
 	margin: 0 auto;
@@ -66,7 +66,7 @@ const Home = () => {
 	};
 
 	return (
-		<Box color="white">
+		<Box>
 			<Logo />
 			<Title>당신을 위한 스냅을 기록해보세요.</Title>
 			<Buttons>

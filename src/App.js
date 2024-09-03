@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Cut from "./pages/Cut";
 import WebCamComponent from "./Components/WebCamComponent";
 import PhotoSelection from "./pages/PhotoSelection";
+import SelectFrame from "./pages/SelectFrame";
 import { useState } from "react";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 						path="/select"
 						element={<PhotoSelection photos={photos} />}
 					/>
+					<Route path="/frame" element={<SelectFrame />} />
 				</Routes>
 			</div>
 		</BrowserRouter>

@@ -91,15 +91,18 @@ const PhotoSelection = ({ photos }) => {
 	const [selectedPhotos, setSelectedPhotos] = useState([]);
 
 	const toggleSelectPhoto = (photo) => {
+		// 사용자가 특정 사진을 클릭했을 때, 그 사진이 이미 선택된 것인지 확인하기 위해 계산
 		const selectedIndex = selectedPhotos.findIndex(
 			(selected) => selected.url === photo
 		);
 
 		if (selectedIndex !== -1) {
+			//이미 선택되어 있던 경우
 			const newSelection = [...selectedPhotos];
-			newSelection.splice(selectedIndex, 1);
+			newSelection.splice(selectedIndex, 1); //선택된 사진에서 제거
 			setSelectedPhotos(newSelection);
 		} else {
+			//선택되어 있지 않은 경우
 			if (selectedPhotos.length < 4) {
 				setSelectedPhotos([
 					...selectedPhotos,
@@ -124,6 +127,7 @@ const PhotoSelection = ({ photos }) => {
 			<Title>사진 4장을 선택해주세요.</Title>
 			<PhotoGrid>
 				{photos.map((photo, index) => {
+					// 화면에 사진들을 렌더링할 때, 각 사진이 선택된 상태인지 확인하기 위해 계산
 					const selectedIndex = selectedPhotos.findIndex(
 						(selected) => selected.url === photo
 					);
