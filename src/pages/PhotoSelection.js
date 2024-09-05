@@ -6,6 +6,7 @@ import {
 	TbCircleNumber3Filled,
 	TbCircleNumber4Filled,
 } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 const Title = styled.h2`
 	font-size: 25px;
@@ -89,6 +90,7 @@ const CheckIcon = styled.div`
 
 const PhotoSelection = ({ photos }) => {
 	const [selectedPhotos, setSelectedPhotos] = useState([]);
+	const navigate = useNavigate();
 
 	const toggleSelectPhoto = (photo) => {
 		// 사용자가 특정 사진을 클릭했을 때, 그 사진이 이미 선택된 것인지 확인하기 위해 계산
@@ -117,6 +119,7 @@ const PhotoSelection = ({ photos }) => {
 	const saveSelectedPhotos = () => {
 		if (selectedPhotos.length === 4) {
 			console.log("Selected photos to save:", selectedPhotos);
+			navigate(`/frame`);
 		} else {
 			alert("4개의 사진을 선택해주세요.");
 		}
