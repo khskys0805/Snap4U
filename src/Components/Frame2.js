@@ -32,15 +32,19 @@ const Logo = styled.img.attrs({
 `;
 
 const Frame2 = ({ handleChooseCut }) => {
+	const gridItems = Array(2).fill(null);
+
 	return (
 		<Grid2 onClick={handleChooseCut}>
 			<GridWrap>
-				<GridItem2 />
-				<GridItem2 />
+				{gridItems.map((_, index) => (
+					<GridItem2 key={index} />
+				))}
 			</GridWrap>
 			<GridWrap>
-				<GridItem2 />
-				<GridItem2 />
+				{gridItems.map((_, index) => (
+					<GridItem2 key={index} />
+				))}
 			</GridWrap>
 			<Logo />
 		</Grid2>
