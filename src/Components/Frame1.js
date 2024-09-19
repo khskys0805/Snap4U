@@ -6,14 +6,12 @@ const Grid1 = styled.div`
 	height: 500px;
 	background: ${(props) => props.color || "#000"};
 	transition: box-shadow 500ms ease-in-out;
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
 	cursor: pointer;
 
 	/* hover 스타일을 prop에 따라 조정 */
 	&:hover {
-		${(props) =>
-			!props.disableHover &&
-			`box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
-			 transform: scale(1.05);`}
+		${(props) => !props.disableHover && `transform: scale(1.05);`}
 	}
 `;
 

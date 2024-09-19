@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Frame1 from "../Components/Frame1";
 import { FaCheck } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
@@ -36,6 +37,7 @@ const Color = styled.div`
 	margin: 0 20px 20px 0;
 	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
 	background: ${(props) => props.color || "#fff"};
+	transition: background 1s ease;
 	cursor: pointer;
 	position: relative;
 
@@ -83,6 +85,8 @@ const FrameLayout = styled.div`
 
 const SelectFrame = () => {
 	const [selectColor, setSelectColor] = useState("#000");
+	const location = useLocation();
+	const { selectedPhotos } = location.state || {};
 
 	const handleSelectColor = (color) => {
 		setSelectColor(color);
