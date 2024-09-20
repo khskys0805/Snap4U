@@ -18,8 +18,11 @@ const Grid1 = styled.div`
 const GridItem1 = styled.div`
 	width: 150px;
 	height: 90px;
-	background: #fff;
+	background: ${({ photo }) => (photo ? `url(${photo.url})` : "#fff")};
+	background-size: cover;
+	background-position: center;
 	margin: 15px 0 0 15px;
+	transform: scaleX(-1);
 `;
 
 const Logo = styled.img.attrs({
@@ -30,8 +33,17 @@ const Logo = styled.img.attrs({
 	margin-top: 30px;
 `;
 
-const Frame1 = ({ handleChooseCut, disableHover, color }) => {
-	const gridItems = Array(4).fill(null); //4개의 그리드 아이템 생성
+const Frame1 = ({ handleChooseCut, disableHover, color, selectedPhotos }) => {
+	const gridItems = Array(4).fill(null);
+
+	// selectedPhotos가 있을 때만 각 그리드에 사진을 채워 넣음
+	if (selectedPhotos && selectedPhotos.length > 0) {
+		selectedPhotos.forEach((photo, index) => {
+			if (index < 4) {
+				gridItems[index] = photo; // 최대 4개만 그리드에 표시
+			}
+		});
+	}
 
 	return (
 		<Grid1
@@ -39,8 +51,8 @@ const Frame1 = ({ handleChooseCut, disableHover, color }) => {
 			disableHover={disableHover}
 			color={color}
 		>
-			{gridItems.map((_, index) => (
-				<GridItem1 key={index} />
+			{gridItems.map((photo, index) => (
+				<GridItem1 key={index} photo={photo} />
 			))}
 			<Logo />
 		</Grid1>

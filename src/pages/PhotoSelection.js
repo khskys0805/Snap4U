@@ -119,7 +119,7 @@ const PhotoSelection = ({ photos }) => {
 	const saveSelectedPhotos = () => {
 		if (selectedPhotos.length === 4) {
 			console.log("Selected photos to save:", selectedPhotos);
-			navigate(`/frame`, { state: selectedPhotos });
+			navigate(`/frame`, { state: { selectedPhotos } });
 		} else {
 			alert("4개의 사진을 선택해주세요.");
 		}

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import logo from "../imgs/logo.png";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 // Box, Logo, Title, Buttons, Button 스타일은 그대로 유지합니다.
 const Box = styled.div`
@@ -61,21 +60,10 @@ const Button = styled.button`
 // Home 컴포넌트 정의
 const Home = () => {
 	const navigate = useNavigate();
-	const [text, setText] = useState("");
-	const apiUrl = "http://localhost:4000/api";
 
 	const handleOnClick = () => {
 		navigate(`/cut`);
 	};
-
-	const sendRequest = async () => {
-		const response = await axios.get(apiUrl);
-		setText(response.data.hello);
-	};
-
-	useEffect(() => {
-		sendRequest();
-	}, []);
 
 	return (
 		<Box>
@@ -84,7 +72,6 @@ const Home = () => {
 			<Buttons>
 				<Button onClick={handleOnClick}>사진 찍기</Button>
 				<Button>갤러리</Button>
-				<h1>{text}</h1>
 			</Buttons>
 		</Box>
 	);

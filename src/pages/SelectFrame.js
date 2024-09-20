@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Frame1 from "../Components/Frame1";
 import { FaCheck } from "react-icons/fa";
@@ -66,7 +66,7 @@ const Color = styled.div`
 	}
 `;
 const colors = [
-	"#ffb3f0",
+	"#f3c9e8",
 	"#ffe252",
 	"#abda95",
 	"#a0ffd1",
@@ -86,8 +86,11 @@ const FrameLayout = styled.div`
 const SelectFrame = () => {
 	const [selectColor, setSelectColor] = useState("#000");
 	const location = useLocation();
-	const { selectedPhotos } = location.state || {};
+	const selectedPhotos = location.state?.selectedPhotos || []; // 빈 배열을 기본값으로 설정
 
+	useEffect(() => {
+		console.log(selectedPhotos);
+	}, []);
 	const handleSelectColor = (color) => {
 		setSelectColor(color);
 	};
@@ -122,7 +125,11 @@ const SelectFrame = () => {
 					</ColorLayout>
 				</Palette>
 				<FrameLayout>
-					<Frame1 disableHover={true} color={selectColor} />
+					<Frame1
+						disableHover={true}
+						color={selectColor}
+						selectedPhotos={selectedPhotos}
+					/>
 				</FrameLayout>
 			</Layout>
 		</Box>
