@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Frame1 from "../Components/Frame1";
 import { FaCheck } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
 	width: 900px;
-	min-height: 100vh; /* 화면 전체 높이를 차지하도록 수정 */
+	min-height: 100vh;
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
@@ -17,14 +17,14 @@ const Box = styled.div`
 
 const Title = styled.h1`
 	font-size: 25px;
-	margin-bottom: 50px;
+	margin-bottom: 30px;
 `;
 const Layout = styled.div`
 	display: flex;
-	align-items: center; /* 세로로 중앙 정렬 */
+	align-items: center;
 `;
 const Palette = styled.div`
-	margin-right: 80px; /* 팔레트와 Frame1 간의 간격 추가 */
+	margin-right: 80px;
 `;
 const ColorLayout = styled.div`
 	display: flex;
@@ -53,18 +53,18 @@ const Color = styled.div`
 		transition: background 0.3s ease;
 	}
 
-	/* 아이콘 위치 */
 	& > svg {
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		color: white; /* 아이콘 색상 */
+		color: white;
 		opacity: ${(props) => (props.isSelected ? 1 : 0)};
 		transition: opacity 0.3s ease;
 		z-index: 2;
 	}
 `;
+
 const colors = [
 	"#f3c9e8",
 	"#ffe252",
@@ -80,20 +80,109 @@ const colors = [
 
 const FrameLayout = styled.div`
 	display: flex;
-	align-items: center; /* Frame1을 세로 중앙 정렬 */
+	align-items: center;
+`;
+
+const Button = styled.button`
+	background-color: #000;
+	border: none;
+	color: white;
+	text-align: center;
+	display: inline-block;
+	font-size: 16px;
+	margin: 0 auto;
+	width: 65px;
+	height: 65px;
+	cursor: pointer;
+	border-radius: 50%;
 `;
 
 const SelectFrame = () => {
 	const [selectColor, setSelectColor] = useState("#000");
 	const location = useLocation();
-	const selectedPhotos = location.state?.selectedPhotos || []; // 빈 배열을 기본값으로 설정
+	const selectedPhotos = location.state?.selectedPhotos || [];
+	const canvasRef = useRef(null);
+	const navigate = useNavigate();
 
-	useEffect(() => {
-		console.log(selectedPhotos);
-	}, []);
+	const saveSelectedPhotos = async () => {
+		try {
+			const combinedImage = await createCombinedImage(
+				selectedPhotos,
+				selectColor
+			);
+
+			const response = await fetch(
+				"http://localhost:4000/saveSelection",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						photoUrl: combinedImage,
+						frameColor: selectColor,
+					}),
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			alert("사진과 프레임 색상이 저장되었습니다.");
+			URL.revokeObjectURL(combinedImage);
+			navigate(`/`);
+		} catch (error) {
+			console.error("Error occurred while saving photos:", error);
+			alert("저장 중 오류가 발생했습니다.");
+		}
+	};
+
+	const createCombinedImage = async (photos, frameColor) => {
+		const canvas = canvasRef.current;
+		const ctx = canvas.getContext("2d");
+
+		canvas.width = 500;
+		canvas.height = 500;
+
+		ctx.fillStyle = frameColor;
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		for (let i = 0; i < photos.length; i++) {
+			const img = new Image();
+			img.src = photos[i];
+			await new Promise((resolve) => {
+				img.onload = () => {
+					const x = (i % 2) * (canvas.width / 2);
+					const y = Math.floor(i / 2) * (canvas.height / 2);
+					ctx.drawImage(
+						img,
+						x,
+						y,
+						canvas.width / 2,
+						canvas.height / 2
+					);
+					resolve();
+				};
+				img.onerror = (error) => {
+					console.error("Image load error:", error);
+					resolve(); // Handle image loading failure
+				};
+			});
+		}
+
+		return new Promise((resolve) => {
+			canvas.toBlob((blob) => {
+				const blobUrl = URL.createObjectURL(blob);
+				resolve(blobUrl);
+			}, "image/jpeg");
+		});
+	};
+
 	const handleSelectColor = (color) => {
 		setSelectColor(color);
 	};
+
 	return (
 		<Box>
 			<Title>프레임을 선택해주세요.</Title>
@@ -132,7 +221,10 @@ const SelectFrame = () => {
 					/>
 				</FrameLayout>
 			</Layout>
+			<canvas ref={canvasRef} style={{ display: "none" }} />
+			<Button onClick={saveSelectedPhotos}>저장</Button>
 		</Box>
 	);
 };
+
 export default SelectFrame;

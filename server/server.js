@@ -1,48 +1,65 @@
-// backend/index.js (Node.js + Express 백엔드)
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors"); // CORS 모듈 불러오기
-const sqlite3 = require("sqlite3").verbose(); // SQLite 모듈 불러오기
+const cors = require("cors");
+const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
 
 const app = express();
-const port = 4000; // React 개발 서버와 다른 포트로 설정
+const port = 4000;
 
-// 미들웨어 설정
-app.use(bodyParser.json()); // JSON 형식의 요청 본문을 파싱하기 위해 사용
-app.use(cors()); // CORS 모든 요청에 대해 허용
+app.use(bodyParser.json());
+app.use(cors());
 
-// 데이터베이스 연결
 const db = new sqlite3.Database("./database.sqlite", (err) => {
 	if (err) {
 		console.error("Error opening database:", err.message);
 	} else {
 		console.log("Connected to SQLite database.");
-
-		// 테이블 생성 (없으면 생성)
-		db.run(`
-		CREATE TABLE IF NOT EXISTS selections (
-		  id INTEGER PRIMARY KEY AUTOINCREMENT,
-		  photoUrl TEXT,
-		  frameColor TEXT
-		)
-	  `);
+		db.run(
+			`
+			CREATE TABLE IF NOT EXISTS selections (
+			  id INTEGER PRIMARY KEY AUTOINCREMENT,
+			  photoUrl TEXT,
+			  frameColor TEXT
+			)
+		  `,
+			(err) => {
+				if (err) {
+					console.error("Error creating table:", err.message);
+				} else {
+					console.log("selections table created or already exists.");
+				}
+			}
+		);
 	}
 });
 
-// 사진과 프레임 색상을 저장하는 엔드포인트
-// app.post("/saveSelection", (req, res) => {
-// 	const { photoUrls, frameColor } = req.body; // 요청에서 데이터 추출
-// 	console.log("Received data:", { photoUrls, frameColor });
+app.post("/saveSelection", (req, res) => {
+	console.log("Received body:", req.body); // 요청 본문 확인
+	const { photoUrl, frameColor } = req.body;
 
-// 	// 간단하게 응답
-// 	res.send("Data received and processed.");
-// });
+	const stmt = db.prepare(
+		"INSERT INTO selections (photoUrl, frameColor) VALUES (?, ?)",
+		(err) => {
+			if (err) {
+				console.error("Error preparing statement:", err.message); // 여기 추가
+				return res.status(500).send("Failed to prepare statement");
+			}
+		}
+	);
 
-app.get("/api", (req, res) => {
-	res.send({ hello: "hello" });
+	stmt.run(photoUrl, frameColor, (err) => {
+		if (err) {
+			console.error("Error inserting data:", err.message);
+			res.status(500).send("Failed to save data");
+			return;
+		}
+		res.status(200).send("Data saved successfully");
+	});
+
+	stmt.finalize();
 });
 
-// 서버 실행
 app.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}`);
 });
