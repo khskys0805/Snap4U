@@ -61,8 +61,8 @@ const Button = styled.button`
 const Home = () => {
 	const navigate = useNavigate();
 
-	const handleOnClick = () => {
-		navigate(`/cut`);
+	const handleOnClick = (destination) => {
+		navigate(destination);
 	};
 
 	return (
@@ -70,8 +70,10 @@ const Home = () => {
 			<Logo />
 			<Title>당신을 위한 스냅을 기록해보세요.</Title>
 			<Buttons>
-				<Button onClick={handleOnClick}>사진 찍기</Button>
-				<Button>갤러리</Button>
+				<Button onClick={() => handleOnClick(`/cut`)}>사진 찍기</Button>
+				<Button onClick={() => handleOnClick(`/gallery`)}>
+					갤러리
+				</Button>
 			</Buttons>
 		</Box>
 	);

@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import cameraClickSound from "../sounds/camera-click.mp3";
 
 const videoConstraints = {
-	width: 850,
-	height: 510,
+	width: 1920,
+	height: 1080,
 	facingMode: "user",
 };
 

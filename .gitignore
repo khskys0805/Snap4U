@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# database
+database.sqlite
+
+# 저장된 이미지 폴더
+uploads/
