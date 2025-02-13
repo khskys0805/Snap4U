@@ -8,6 +8,16 @@ const fs = require("fs"); // fs 모듈을 추가
 const app = express();
 const port = 4000;
 
+// 정적 파일 서빙 추가 (추가할 부분)
+app.use(
+	"/uploads",
+	cors({
+		origin: "http://localhost:3000", // React 클라이언트 주소
+		methods: ["GET"],
+		allowedHeaders: ["Content-Type", "Authorization"],
+	}),
+	express.static(path.join(__dirname, "uploads"))
+);
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -57,24 +67,13 @@ const saveBase64Image = (base64Data, filePath) => {
 	);
 	const buffer = Buffer.from(base64String, "base64");
 
-	// uploads 디렉토리 절대 경로
 	const uploadDir = path.join(__dirname, "uploads");
-
-	// 디렉토리가 존재하는지 확인하고, 없으면 생성
 	if (!fs.existsSync(uploadDir)) {
-		console.log("uploads 디렉토리가 없습니다. 생성 중...");
 		fs.mkdirSync(uploadDir, { recursive: true });
-		console.log("uploads 디렉토리 생성됨.");
-	} else {
-		console.log("uploads 디렉토리가 이미 존재합니다.");
 	}
 
-	// 상대 경로를 생성해서 DB에 저장할 경로를 반환
-	const relativeFilePath = path.join("uploads", filePath);
 	const fullFilePath = path.join(uploadDir, filePath);
-	console.log("Full file path:", fullFilePath); // 경로 출력
 
-	// 파일 경로에 이미지 저장
 	try {
 		fs.writeFileSync(fullFilePath, buffer);
 		console.log(`Image saved to ${fullFilePath}`);
@@ -82,7 +81,8 @@ const saveBase64Image = (base64Data, filePath) => {
 		console.error("Error saving image:", error.message);
 	}
 
-	return relativeFilePath; // 데이터베이스에 저장할 상대 경로 반환
+	// 절대 경로로 반환: `/uploads/photo_1739438891411.png`
+	return `/uploads/${filePath}`;
 };
 
 app.post("/saveSelection", (req, res) => {

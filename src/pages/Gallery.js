@@ -1,28 +1,31 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { FaDownload } from "react-icons/fa";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
-	width: 900px;
+	width: 1200px;
 	min-height: 100vh;
-	margin: 0 auto;
+	margin: 50px auto;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
 `;
-const Title = styled.h1`
+const Title = styled.h2`
 	text-align: center;
 `;
 const PhotoGrid = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	gap: 16px; /* 사진 간격 */
+	gap: 20px; /* 사진 간격 */
 	width: 100%;
+	margin: 50px 0;
 `;
 const PhotoItem = styled.div`
-	flex: 0 0 calc(33.33% - 16px); /* 3개씩 배치, 간격 고려 */
+	flex: 0 0 calc(33.33% - 20px); /* 3개씩 배치, 간격 고려 */
 	box-sizing: border-box;
 	display: flex;
 	justify-content: center;
@@ -30,13 +33,93 @@ const PhotoItem = styled.div`
 	background-color: #f9f9f9;
 	border: 1px solid #ddd;
 	padding: 8px;
+	position: relative;
+	aspect-ratio: 1; /* width와 height 비율을 1:1로 맞춤 */
+	overflow: hidden;
+	cursor: pointer;
+	transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
 	img {
-		max-width: 100%;
-		height: auto;
+		height: 100%;
+		object-fit: cover; /* 이미지가 넘치지 않도록 조정 */
+		transition: transform 0.3s ease-in-out;
+	}
+
+	&:hover {
+		background-color: #ddd;
+		transform: scale(1.05); /* 전체 크기를 살짝 키움 */
 	}
 `;
+
+// 모달 스타일
+const ModalOverlay = styled.div`
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+	background: white;
+	padding: 20px;
+	border-radius: 10px;
+	position: relative;
+	width: 50%;
+	height: 90%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	img {
+		max-width: 100%;
+		max-height: 90%;
+		object-fit: contain;
+	}
+`;
+
+const CloseButton = styled(IoCloseCircleOutline)`
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 30px;
+	color: black;
+	cursor: pointer;
+	transition: color 0.2s ease-in-out;
+
+	&:hover {
+		color: red;
+	}
+`;
+
+// 저장 버튼 스타일
+const SaveButton = styled.button`
+	margin-top: 20px;
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #333537;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	transition: background-color 0.2s ease-in-out;
+
+	&:hover {
+		background-color: #000;
+	}
+`;
+
 const Gallery = () => {
 	const [photos, setPhotos] = useState([]);
+	const [selectedPhoto, setSelectedPhoto] = useState(null);
 	const fetchPhotos = async () => {
 		try {
 			const response = await fetch("http://localhost:4000/gallery", {
@@ -60,19 +143,58 @@ const Gallery = () => {
 	useEffect(() => {
 		fetchPhotos();
 	}, []);
+
+	// 이미지 다운로드 함수
+	const handleDownload = async (url) => {
+		try {
+			const response = await fetch(url);
+			const blob = await response.blob();
+			const blobUrl = window.URL.createObjectURL(blob);
+
+			const link = document.createElement("a");
+			link.href = blobUrl;
+			link.download = url.split("/").pop();
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			window.URL.revokeObjectURL(blobUrl);
+		} catch (error) {
+			console.error("이미지 다운로드 실패:", error);
+			alert("이미지를 다운로드할 수 없습니다.");
+		}
+	};
+
 	return (
 		<Box>
-			<Title />
+			<Title>갤러리</Title>
 			<PhotoGrid>
-				{photos.map((photo, index) => (
-					<PhotoItem key={index}>
-						<img
-							src={`http://localhost:4000/images/${photo.photoUrl}`}
-							alt={`Photo ${index}`}
-						/>
-					</PhotoItem>
-				))}
+				{photos.map((photo, index) => {
+					const fullPhotoUrl = `http://localhost:4000${photo.photoUrl}`;
+					return (
+						<PhotoItem
+							key={index}
+							onClick={() => setSelectedPhoto(fullPhotoUrl)}
+						>
+							<img src={fullPhotoUrl} alt={`Photo ${index}`} />
+						</PhotoItem>
+					);
+				})}
 			</PhotoGrid>
+
+			{/* 모달 창 */}
+			{selectedPhoto && (
+				<ModalOverlay onClick={() => setSelectedPhoto(null)}>
+					<ModalContent onClick={(e) => e.stopPropagation()}>
+						<CloseButton onClick={() => setSelectedPhoto(null)} />
+						<img src={selectedPhoto} alt="Selected" />
+						<SaveButton
+							onClick={() => handleDownload(selectedPhoto)}
+						>
+							<FaDownload /> 이미지 저장
+						</SaveButton>
+					</ModalContent>
+				</ModalOverlay>
+			)}
 		</Box>
 	);
 };
