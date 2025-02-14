@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Frame1 from "../Components/Frame1";
+import Frame2 from "../Components/Frame2";
 import { FaCheck } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo1 from "../imgs/logo.png";
@@ -107,6 +108,7 @@ const SelectFrame = () => {
 	const [selectColor, setSelectColor] = useState("#000");
 	const location = useLocation();
 	const selectedPhotos = location.state?.selectedPhotos || [];
+	const selectedFrame = location.state?.selectedFrame || ""; // ✅ 올바른 변수명
 	console.log(selectedPhotos);
 	const canvasRef = useRef(null);
 	const navigate = useNavigate();
@@ -115,7 +117,8 @@ const SelectFrame = () => {
 		try {
 			const combinedImage = await createCombinedImage(
 				selectedPhotos,
-				selectColor
+				selectColor,
+				selectedFrame
 			);
 
 			const response = await fetch(
@@ -147,16 +150,34 @@ const SelectFrame = () => {
 		}
 	};
 
-	const createCombinedImage = async (selectedPhotos, frameColor) => {
+	const createCombinedImage = async (
+		selectedPhotos,
+		frameColor,
+		selectedFrame
+	) => {
 		const canvas = document.createElement("canvas");
 		const ctx = canvas.getContext("2d");
-		ctx.imageSmoothingEnabled = true; // 이미지 품질 향상
-		ctx.imageSmoothingQuality = "high"; // 고품질로 설정
+		ctx.imageSmoothingEnabled = true;
+		ctx.imageSmoothingQuality = "high";
 
+		let frameWidth, frameHeight, imageWidth, imageHeight, padding;
 		const scale = 3;
-		const frameWidth = 180 * scale;
-		const frameHeight = 500 * scale;
-		const padding = 15 * scale;
+
+		if (selectedFrame === "Frame2") {
+			// Frame2 설정
+			frameWidth = 395 * scale;
+			frameHeight = 500 * scale;
+			imageWidth = 175 * scale;
+			imageHeight = 195 * scale;
+			padding = 15 * scale;
+		} else {
+			// 기본 Frame1 설정
+			frameWidth = 180 * scale;
+			frameHeight = 500 * scale;
+			imageWidth = 150 * scale;
+			imageHeight = 90 * scale;
+			padding = 15 * scale;
+		}
 
 		canvas.width = frameWidth;
 		canvas.height = frameHeight;
@@ -165,10 +186,7 @@ const SelectFrame = () => {
 		ctx.fillStyle = frameColor;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		const imageWidth = 150 * scale;
-		const imageHeight = 90 * scale;
-
-		let lastImageY = 0; // 마지막 이미지의 Y 좌표 저장
+		let lastImageY = 0;
 
 		for (let i = 0; i < selectedPhotos.length; i++) {
 			const img = new Image();
@@ -176,9 +194,20 @@ const SelectFrame = () => {
 
 			await new Promise((resolve) => {
 				img.onload = () => {
-					const x = padding;
-					const y = i * (imageHeight + padding) + padding;
-					lastImageY = y + imageHeight; // 마지막 이미지의 Y 좌표 업데이트
+					let x, y;
+					if (selectedFrame === "Frame2") {
+						// 2개씩 배치
+						x = (i % 2) * (imageWidth + padding) + padding;
+						y =
+							Math.floor(i / 2) * (imageHeight + padding) +
+							padding;
+					} else {
+						// 기존 방식 (세로로 4개)
+						x = padding;
+						y = i * (imageHeight + padding) + padding;
+					}
+
+					lastImageY = y + imageHeight;
 
 					// 좌우 반전 설정
 					ctx.save();
@@ -203,10 +232,10 @@ const SelectFrame = () => {
 
 		await new Promise((resolve) => {
 			logo.onload = () => {
-				const logoWidth = 130 * scale;
-				const logoHeight = 25 * scale;
+				const logoWidth =
+					selectedFrame === "Frame2" ? 130 * scale : 130; // Frame2일 때 로고 크기 3배
+				const logoHeight = selectedFrame === "Frame2" ? 25 * scale : 25; // Frame2일 때 로고 크기 3배
 
-				// 남은 공간 가운데에 로고 배치
 				const remainingHeight = frameHeight - lastImageY;
 				const logoY = lastImageY + (remainingHeight - logoHeight) / 2;
 
@@ -260,11 +289,21 @@ const SelectFrame = () => {
 					</ColorLayout>
 				</Palette>
 				<FrameLayout>
-					<Frame1
-						disableHover={true}
-						color={selectColor}
-						selectedPhotos={selectedPhotos}
-					/>
+					{selectedFrame === "Frame1" && (
+						<Frame1
+							disableHover={true}
+							color={selectColor}
+							selectedPhotos={selectedPhotos}
+						/>
+					)}
+					{selectedFrame === "Frame2" && (
+						<Frame2
+							disableHover={true}
+							color={selectColor}
+							selectedPhotos={selectedPhotos}
+							isPhotoSelected={true}
+						/>
+					)}
 				</FrameLayout>
 			</Layout>
 			<canvas ref={canvasRef} style={{ display: "none" }} />

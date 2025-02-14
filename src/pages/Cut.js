@@ -29,15 +29,15 @@ const Grids = styled.div`
 const Cut = () => {
 	const navigate = useNavigate();
 
-	const handleChooseCut = () => {
-		navigate(`/camera`);
+	const handleChooseCut = (frame) => {
+		navigate("/camera", { state: { selectedFrame: frame } }); // 선택된 프레임을 state로 넘김
 	};
 	return (
 		<Box color="white">
 			<Title>사진 찍을 컷을 선택해주세요.</Title>
 			<Grids>
-				<Frame1 handleChooseCut={handleChooseCut} />
-				<Frame2 handleChooseCut={handleChooseCut} />
+				<Frame1 handleChooseCut={() => handleChooseCut("Frame1")} />
+				<Frame2 handleChooseCut={() => handleChooseCut("Frame2")} />
 			</Grids>
 		</Box>
 	);

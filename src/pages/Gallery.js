@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { IoCloseCircleOutline } from "react-icons/io5";
+import { IoCloseCircleOutline, IoChevronBackCircle } from "react-icons/io5";
 import { FaDownload } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
@@ -12,20 +13,29 @@ const Box = styled.div`
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	position: relative;
+`;
+const Back = styled(IoChevronBackCircle)`
+	position: absolute;
+	left: 5px;
+	top: 0;
+	font-size: 30px;
+	cursor: pointer;
 `;
 const Title = styled.h2`
 	text-align: center;
 `;
 const PhotoGrid = styled.div`
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
+	flex-wrap: wrap; /* 줄 바꿈을 허용 */
+	justify-content: flex-start; /* 왼쪽 정렬 */
 	gap: 20px; /* 사진 간격 */
 	width: 100%;
 	margin: 50px 0;
 `;
+
 const PhotoItem = styled.div`
-	flex: 0 0 calc(33.33% - 20px); /* 3개씩 배치, 간격 고려 */
+	flex: 0 0 calc(33.33% - 14px); /* 3개씩 배치, 간격 고려 */
 	box-sizing: border-box;
 	display: flex;
 	justify-content: center;
@@ -120,6 +130,8 @@ const SaveButton = styled.button`
 const Gallery = () => {
 	const [photos, setPhotos] = useState([]);
 	const [selectedPhoto, setSelectedPhoto] = useState(null);
+	const navigate = useNavigate();
+
 	const fetchPhotos = async () => {
 		try {
 			const response = await fetch("http://localhost:4000/gallery", {
@@ -166,6 +178,11 @@ const Gallery = () => {
 
 	return (
 		<Box>
+			<Back
+				onClick={() => {
+					navigate(-1);
+				}}
+			/>
 			<Title>갤러리</Title>
 			<PhotoGrid>
 				{photos.map((photo, index) => {

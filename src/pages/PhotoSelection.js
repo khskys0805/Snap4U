@@ -6,7 +6,7 @@ import {
 	TbCircleNumber3Filled,
 	TbCircleNumber4Filled,
 } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Title = styled.h2`
 	font-size: 25px;
@@ -40,8 +40,9 @@ const Container = styled.div`
 const PhotoGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
-	gap: 10px;
+	gap: ${(props) => (props.frameType === "Frame2" ? "25px" : "10px")};
 	margin: 20px 0;
+	padding: ${(props) => (props.frameType === "Frame2" ? "0 250px" : "0")};
 `;
 
 const Thumbnail = styled.div`
@@ -92,6 +93,9 @@ const PhotoSelection = ({ photos }) => {
 	const [selectedPhotos, setSelectedPhotos] = useState([]);
 	const navigate = useNavigate();
 
+	const location = useLocation();
+	const { selectedFrame } = location.state || {};
+
 	const toggleSelectPhoto = (photo) => {
 		// 사용자가 특정 사진을 클릭했을 때, 그 사진이 이미 선택된 것인지 확인하기 위해 계산
 		const selectedIndex = selectedPhotos.findIndex(
@@ -119,7 +123,7 @@ const PhotoSelection = ({ photos }) => {
 	const saveSelectedPhotos = () => {
 		if (selectedPhotos.length === 4) {
 			console.log("Selected photos to save:", selectedPhotos);
-			navigate(`/frame`, { state: { selectedPhotos } });
+			navigate(`/frame`, { state: { selectedPhotos, selectedFrame } });
 		} else {
 			alert("4개의 사진을 선택해주세요.");
 		}
@@ -128,7 +132,7 @@ const PhotoSelection = ({ photos }) => {
 	return (
 		<Container>
 			<Title>사진 4장을 선택해주세요.</Title>
-			<PhotoGrid>
+			<PhotoGrid frameType={selectedFrame}>
 				{photos.map((photo, index) => {
 					// 화면에 사진들을 렌더링할 때, 각 사진이 선택된 상태인지 확인하기 위해 계산
 					const selectedIndex = selectedPhotos.findIndex(
