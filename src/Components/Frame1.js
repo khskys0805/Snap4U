@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import logo from "../imgs/logo2.png";
+import logo1 from "../imgs/logo.png";
+import logo2 from "../imgs/logo2.png";
 
 const Grid1 = styled.div`
 	width: 180px;
@@ -25,10 +26,10 @@ const GridItem1 = styled.div`
 	transform: scaleX(-1);
 `;
 
-const Logo = styled.img.attrs({
-	src: logo,
+const Logo = styled.img.attrs(({ color }) => ({
+	src: color === "#fff" ? logo1 : logo2,
 	alt: "",
-})`
+}))`
 	width: 130px;
 	margin-top: 30px;
 `;
@@ -54,7 +55,7 @@ const Frame1 = ({ handleChooseCut, disableHover, color, selectedPhotos }) => {
 			{gridItems.map((photo, index) => (
 				<GridItem1 key={index} photo={photo} />
 			))}
-			<Logo />
+			<Logo color={color} />
 		</Grid1>
 	);
 };
