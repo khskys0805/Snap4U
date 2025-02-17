@@ -11,19 +11,21 @@ const Box = styled.div`
 	margin: 50px auto;
 	display: flex;
 	align-items: center;
-	justify-content: center;
 	flex-direction: column;
-	position: relative;
+`;
+const FlexContainer = styled.div`
+	display: flex;
+	width: 100%; /* 전체 너비를 사용 */
+	justify-content: space-between; /* 두 요소를 양 끝에 배치 */
+	align-items: center; /* 수직 중앙 정렬 */
 `;
 const Back = styled(IoChevronBackCircle)`
-	position: absolute;
-	left: 5px;
-	top: 0;
 	font-size: 30px;
 	cursor: pointer;
 `;
 const Title = styled.h2`
 	text-align: center;
+	width: 100%;
 `;
 const PhotoGrid = styled.div`
 	display: flex;
@@ -178,21 +180,23 @@ const Gallery = () => {
 
 	return (
 		<Box>
-			<Back
-				onClick={() => {
-					navigate(-1);
-				}}
-			/>
-			<Title>갤러리</Title>
+			<FlexContainer>
+				<Back
+					onClick={() => {
+						navigate(-1);
+					}}
+				/>
+				<Title>갤러리</Title>
+			</FlexContainer>
 			<PhotoGrid>
 				{photos.map((photo, index) => {
-					const fullPhotoUrl = `http://localhost:4000${photo.photoUrl}`;
+					// 이미 절대 URL 형태로 제공되므로, 그냥 photo.photoUrl을 사용
 					return (
 						<PhotoItem
 							key={index}
-							onClick={() => setSelectedPhoto(fullPhotoUrl)}
+							onClick={() => setSelectedPhoto(photo.photoUrl)}
 						>
-							<img src={fullPhotoUrl} alt={`Photo ${index}`} />
+							<img src={photo.photoUrl} alt={`Photo ${index}`} />
 						</PhotoItem>
 					);
 				})}

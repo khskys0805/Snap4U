@@ -27,3 +27,5 @@ database.sqlite
 
 # 저장된 이미지 폴더
 uploads/
+
+.env

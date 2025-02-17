@@ -232,9 +232,8 @@ const SelectFrame = () => {
 
 		await new Promise((resolve) => {
 			logo.onload = () => {
-				const logoWidth =
-					selectedFrame === "Frame2" ? 130 * scale : 130; // Frame2일 때 로고 크기 3배
-				const logoHeight = selectedFrame === "Frame2" ? 25 * scale : 25; // Frame2일 때 로고 크기 3배
+				const logoWidth = 130 * scale; // Frame2일 때 로고 크기 3배
+				const logoHeight = 25 * scale; // Frame2일 때 로고 크기 3배
 
 				const remainingHeight = frameHeight - lastImageY;
 				const logoY = lastImageY + (remainingHeight - logoHeight) / 2;
