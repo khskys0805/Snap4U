@@ -136,7 +136,7 @@ const Gallery = () => {
 
 	const fetchPhotos = async () => {
 		try {
-			const response = await fetch("http://localhost:4000/gallery", {
+			const response = await fetch("https://snap4u.vercel.app/gallery", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
