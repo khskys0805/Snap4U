@@ -18,10 +18,11 @@ const allowedOrigins = [
 	"https://snap4-u.vercel.app",
 ];
 
+// CORS 미들웨어 설정
 app.use(
 	cors({
 		origin: function (origin, callback) {
-			if (allowedOrigins.indexOf(origin) !== -1) {
+			if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
 				callback(null, true);
 			} else {
 				callback(new Error("Not allowed by CORS"));
@@ -31,6 +32,9 @@ app.use(
 		allowedHeaders: ["Content-Type", "Authorization"],
 	})
 );
+
+// 모든 OPTIONS 요청에 대해 CORS 응답 추가
+app.options("*", cors()); // 모든 요청에 대해 OPTIONS 처리
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
