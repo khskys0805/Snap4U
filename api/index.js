@@ -12,7 +12,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// CORS 설정
+// CORS 설정 (중복된 cors 호출 제거)
 app.use(
 	cors({
 		origin: "https://snap4-u-git-main-kim-hyunsus-projects.vercel.app", // 요청을 허용할 도메인
@@ -23,7 +23,6 @@ app.use(
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-app.use(cors());
 
 // Supabase 이미지 업로드 함수
 const uploadImageToSupabase = async (base64Data, fileName) => {
