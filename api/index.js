@@ -1,8 +1,6 @@
-require("dotenv").config(); // .env 파일 로드
-
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const { createClient } = require("@supabase/supabase-js");
 const path = require("path");
 
@@ -10,23 +8,15 @@ const app = express();
 const port = 4000;
 
 // Supabase 설정
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL; // Supabase 프로젝트 URL
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY; // Supabase 서비스 키
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(cors());
 
-// CORS 설정
-app.use(
-	cors({
-		origin: "http://localhost:3000",
-		methods: ["GET", "POST"],
-		allowedHeaders: ["Content-Type", "Authorization"],
-	})
-);
-
-// Base64 이미지를 Supabase Storage에 저장하는 함수
+// Supabase 이미지 업로드 함수
 const uploadImageToSupabase = async (base64Data, fileName) => {
 	const base64String = base64Data.replace(
 		/^data:image\/(png|jpeg|jpg);base64,/,
@@ -34,7 +24,6 @@ const uploadImageToSupabase = async (base64Data, fileName) => {
 	);
 	const buffer = Buffer.from(base64String, "base64");
 
-	// Supabase Storage 업로드
 	const { data, error } = await supabase.storage
 		.from("uploads")
 		.upload(fileName, buffer, {
@@ -46,7 +35,6 @@ const uploadImageToSupabase = async (base64Data, fileName) => {
 		throw new Error("Failed to upload image");
 	}
 
-	// 업로드된 이미지의 공개 URL 가져오기
 	const { data: publicUrlData } = supabase.storage
 		.from("uploads")
 		.getPublicUrl(fileName);
@@ -60,10 +48,8 @@ app.post("/saveSelection", async (req, res) => {
 		const timestamp = Date.now();
 		const fileName = `photo_${timestamp}.png`;
 
-		// 이미지를 Supabase Storage에 업로드
 		const imageUrl = await uploadImageToSupabase(photoUrl, fileName);
 
-		// 데이터베이스에 저장
 		const { error } = await supabase
 			.from("photos")
 			.insert([{ photoUrl: imageUrl, frameColor }]);
@@ -91,6 +77,5 @@ app.get("/gallery", async (req, res) => {
 	}
 });
 
-app.listen(port, () => {
-	console.log(`Server running at http://localhost:${port}`);
-});
+// 서버리스 함수로 export
+module.exports = app;
