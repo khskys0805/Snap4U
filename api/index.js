@@ -12,10 +12,21 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// CORS 설정 (중복된 cors 호출 제거)
+// 허용할 오리진 목록
+const allowedOrigins = [
+	"https://snap4-u-git-main-kim-hyunsus-projects.vercel.app",
+	"https://snap4-l56kcf2ne-kim-hyunsus-projects.vercel.app",
+];
+
 app.use(
 	cors({
-		origin: "https://snap4-u-git-main-kim-hyunsus-projects.vercel.app", // 요청을 허용할 도메인
+		origin: function (origin, callback) {
+			if (allowedOrigins.indexOf(origin) !== -1) {
+				callback(null, true);
+			} else {
+				callback(new Error("Not allowed by CORS"));
+			}
+		},
 		methods: ["GET", "POST"],
 		allowedHeaders: ["Content-Type", "Authorization"],
 	})
