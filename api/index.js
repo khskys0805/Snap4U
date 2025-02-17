@@ -15,7 +15,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // 허용할 오리진 목록
 const allowedOrigins = [
 	"https://snap4-u-git-main-kim-hyunsus-projects.vercel.app",
-	"https://snap4-l56kcf2ne-kim-hyunsus-projects.vercel.app",
+	"https://snap4-u.vercel.app",
 ];
 
 app.use(
