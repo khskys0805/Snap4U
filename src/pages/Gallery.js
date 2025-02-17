@@ -136,12 +136,15 @@ const Gallery = () => {
 
 	const fetchPhotos = async () => {
 		try {
-			const response = await fetch("https://snap4u.vercel.app/gallery", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
+			const response = await fetch(
+				"https://snap4-u.vercel.app/api/gallery",
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}

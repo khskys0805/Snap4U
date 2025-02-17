@@ -122,7 +122,7 @@ const SelectFrame = () => {
 			);
 
 			const response = await fetch(
-				"https://snap4u.vercel.app/saveSelection",
+				"https://snap4-u.vercel.app/api/saveSelection",
 				{
 					method: "POST",
 					headers: {
