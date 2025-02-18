@@ -121,19 +121,16 @@ const SelectFrame = () => {
 				selectedFrame
 			);
 
-			const response = await fetch(
-				"https://snap4-u.vercel.app/api/saveSelection",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						photoUrl: combinedImage,
-						frameColor: selectColor,
-					}),
-				}
-			);
+			const response = await fetch("/api/saveSelection", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					photoUrl: combinedImage,
+					frameColor: selectColor,
+				}),
+			});
 
 			if (response.ok) {
 				console.log("Photo saved successfully.");
