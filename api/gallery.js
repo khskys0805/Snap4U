@@ -1,4 +1,4 @@
-import { supabase } from "../../lib/supabase"; // Supabase 클라이언트 import
+import { supabase } from "./index.js"; // Supabase 클라이언트 import
 
 export default async function handler(req, res) {
 	if (req.method === "GET") {
