@@ -1,5 +1,6 @@
-import { app, supabase } from "./index.js";
+import { supabase } from "./index.js"; // Supabase 클라이언트 import
 
+// 이미지 업로드 함수
 const uploadImageToSupabase = async (base64Data, fileName) => {
 	const base64String = base64Data.replace(
 		/^data:image\/(png|jpeg|jpg);base64,/,
@@ -24,22 +25,27 @@ const uploadImageToSupabase = async (base64Data, fileName) => {
 	return publicUrlData.publicUrl;
 };
 
-app.post("/saveSelection", async (req, res) => {
-	try {
-		const { photoUrl, frameColor } = req.body;
-		const timestamp = Date.now();
-		const fileName = `photo_${timestamp}.png`;
+// 서버리스 핸들러
+export default async function handler(req, res) {
+	if (req.method === "POST") {
+		try {
+			const { photoUrl, frameColor } = req.body;
+			const timestamp = Date.now();
+			const fileName = `photo_${timestamp}.png`;
 
-		const imageUrl = await uploadImageToSupabase(photoUrl, fileName);
+			const imageUrl = await uploadImageToSupabase(photoUrl, fileName);
 
-		const { error } = await supabase
-			.from("photos")
-			.insert([{ photoUrl: imageUrl, frameColor }]);
-		if (error) throw error;
+			const { error } = await supabase
+				.from("photos")
+				.insert([{ photoUrl: imageUrl, frameColor }]);
+			if (error) throw error;
 
-		res.status(200).send("Data saved successfully");
-	} catch (error) {
-		console.error("Error:", error.message);
-		res.status(500).send("Failed to save data");
+			res.status(200).send("Data saved successfully");
+		} catch (error) {
+			console.error("Error:", error.message);
+			res.status(500).send("Failed to save data");
+		}
+	} else {
+		res.status(405).send("Method Not Allowed");
 	}
-});
+}
