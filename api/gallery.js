@@ -11,3 +11,5 @@ app.get("/gallery", async (req, res) => {
 		res.status(500).send("Failed to fetch data");
 	}
 });
+
+export { app };

@@ -44,4 +44,4 @@ app.post("/saveSelection", async (req, res) => {
 	}
 });
 
-module.exports = app;
+export { app };
