@@ -43,5 +43,3 @@ app.post("/saveSelection", async (req, res) => {
 		res.status(500).send("Failed to save data");
 	}
 });
-
-export { app };
