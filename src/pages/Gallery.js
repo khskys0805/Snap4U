@@ -4,6 +4,7 @@ import { IoCloseCircleOutline, IoChevronBackCircle } from "react-icons/io5";
 import { FaDownload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
@@ -130,10 +131,24 @@ const SaveButton = styled.button`
 	}
 `;
 
+// 로딩 인디케이터 스타일
+const LoaderOverlay = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+`;
+
 const Gallery = () => {
 	const [photos, setPhotos] = useState([]);
 	const [selectedPhoto, setSelectedPhoto] = useState(null);
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(true);
 
 	const fetchPhotos = async () => {
 		try {
@@ -148,6 +163,7 @@ const Gallery = () => {
 			}
 			const data = await response.json(); // JSON 데이터 파싱
 			setPhotos(data);
+			setLoading(false);
 			console.log("Fetched photos:", data); // 콘솔에 데이터 출력
 		} catch (error) {
 			console.error("Error occurred while saving photos:", error);
@@ -173,6 +189,7 @@ const Gallery = () => {
 			link.click();
 			document.body.removeChild(link);
 			window.URL.revokeObjectURL(blobUrl);
+			toast.success("이미지가 다운로드 되었습니다.");
 		} catch (error) {
 			console.error("이미지 다운로드 실패:", error);
 			toast.error("이미지를 다운로드할 수 없습니다.");
@@ -181,27 +198,40 @@ const Gallery = () => {
 
 	return (
 		<Box>
-			<FlexContainer>
-				<Back
-					onClick={() => {
-						navigate(-1);
-					}}
-				/>
-				<Title>갤러리</Title>
-			</FlexContainer>
-			<PhotoGrid>
-				{photos.map((photo, index) => {
-					// 이미 절대 URL 형태로 제공되므로, 그냥 photo.photoUrl을 사용
-					return (
-						<PhotoItem
-							key={index}
-							onClick={() => setSelectedPhoto(photo.photoUrl)}
-						>
-							<img src={photo.photoUrl} alt={`Photo ${index}`} />
-						</PhotoItem>
-					);
-				})}
-			</PhotoGrid>
+			{/* 로딩 인디케이터 */}
+			{loading && (
+				<LoaderOverlay>
+					<ClipLoader color="#333537" size={50} />
+				</LoaderOverlay>
+			)}
+
+			{/* 로딩 상태가 아닐 때만 내용 표시 */}
+			{!loading && (
+				<>
+					<FlexContainer>
+						<Back
+							onClick={() => {
+								navigate(-1);
+							}}
+						/>
+						<Title>갤러리</Title>
+					</FlexContainer>
+
+					<PhotoGrid>
+						{photos.map((photo, index) => (
+							<PhotoItem
+								key={index}
+								onClick={() => setSelectedPhoto(photo.photoUrl)}
+							>
+								<img
+									src={photo.photoUrl}
+									alt={`Photo ${index}`}
+								/>
+							</PhotoItem>
+						))}
+					</PhotoGrid>
+				</>
+			)}
 
 			{/* 모달 창 */}
 			{selectedPhoto && (
