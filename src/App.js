@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/Home";
-import Cut from "./pages/Cut";
-import WebCamComponent from "./Components/WebCamComponent";
-import PhotoSelection from "./pages/PhotoSelection";
-import SelectFrame from "./pages/SelectFrame";
-import Gallery from "./pages/Gallery";
+import Home from "./pages/Home.js";
+import Cut from "./pages/Cut.js";
+import WebCamComponent from "./Components/WebCamComponent.js";
+import PhotoSelection from "./pages/PhotoSelection.js";
+import SelectFrame from "./pages/SelectFrame.js";
+import Gallery from "./pages/Gallery.js";
 import { useState } from "react";
 
 function App() {

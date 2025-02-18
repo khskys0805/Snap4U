@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import Frame1 from "../Components/Frame1";
-import Frame2 from "../Components/Frame2";
+import Frame1 from "../Components/Frame1.js";
+import Frame2 from "../Components/Frame2.js";
 import { FaCheck } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo1 from "../imgs/logo.png";

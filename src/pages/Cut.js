@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import Frame1 from "../Components/Frame1";
-import Frame2 from "../Components/Frame2";
+import Frame1 from "../Components/Frame1.js";
+import Frame2 from "../Components/Frame2.js";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "blue"};
