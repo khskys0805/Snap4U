@@ -7,6 +7,7 @@ import PhotoSelection from "./pages/PhotoSelection.js";
 import SelectFrame from "./pages/SelectFrame.js";
 import Gallery from "./pages/Gallery.js";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 function App() {
 	const [photos, setPhotos] = useState([]);
@@ -14,6 +15,7 @@ function App() {
 	return (
 		<BrowserRouter>
 			<div className="App">
+				<Toaster />
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/cut" element={<Cut />} />

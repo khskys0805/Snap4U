@@ -6,6 +6,7 @@ import { FaCheck } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo1 from "../imgs/logo.png";
 import logo2 from "../imgs/logo2.png";
+import { toast } from "react-hot-toast";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
@@ -138,12 +139,12 @@ const SelectFrame = () => {
 				console.log("Error saving photo:", response.statusText);
 			}
 
-			alert("사진과 프레임 색상이 저장되었습니다.");
+			toast.success("사진과 프레임 색상이 저장되었습니다.");
 			URL.revokeObjectURL(combinedImage);
 			navigate(`/`);
 		} catch (error) {
 			console.error("Error occurred while saving photos:", error);
-			alert("저장 중 오류가 발생했습니다.");
+			toast.error("저장 중 오류가 발생했습니다.");
 		}
 	};
 

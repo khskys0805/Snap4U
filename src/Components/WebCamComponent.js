@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { FaCamera } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import cameraClickSound from "../sounds/camera-click.mp3";
+import { toast } from "react-hot-toast";
 
 const frame1VideoConstraints = {
 	width: 1920,
@@ -102,7 +103,9 @@ const WebCamComponent = ({ setPhotos }) => {
 					if (capturedPhotos.length < 10) {
 						capturePhoto();
 					} else {
-						alert("이미 10장의 사진을 캡처했습니다.");
+						toast.error(
+							"이미 10장의 사진을 캡처했습니다. 더 이상 선택할 수 없습니다."
+						);
 					}
 				}}
 			>

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { IoCloseCircleOutline, IoChevronBackCircle } from "react-icons/io5";
 import { FaDownload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
@@ -150,7 +151,7 @@ const Gallery = () => {
 			console.log("Fetched photos:", data); // 콘솔에 데이터 출력
 		} catch (error) {
 			console.error("Error occurred while saving photos:", error);
-			alert("저장 중 오류가 발생했습니다.");
+			toast.error("사진을 가져오는데 오류가 발생하였습니다.");
 		}
 	};
 
@@ -174,7 +175,7 @@ const Gallery = () => {
 			window.URL.revokeObjectURL(blobUrl);
 		} catch (error) {
 			console.error("이미지 다운로드 실패:", error);
-			alert("이미지를 다운로드할 수 없습니다.");
+			toast.error("이미지를 다운로드할 수 없습니다.");
 		}
 	};
 

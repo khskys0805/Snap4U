@@ -7,6 +7,7 @@ import {
 	TbCircleNumber4Filled,
 } from "react-icons/tb";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const Title = styled.h2`
 	font-size: 25px;
@@ -115,7 +116,7 @@ const PhotoSelection = ({ photos }) => {
 					{ url: photo, order: selectedPhotos.length },
 				]);
 			} else {
-				alert("사진은 4장까지 선택이 가능합니다.");
+				toast.error("사진은 4장까지 선택이 가능합니다.");
 			}
 		}
 	};
@@ -125,7 +126,7 @@ const PhotoSelection = ({ photos }) => {
 			console.log("Selected photos to save:", selectedPhotos);
 			navigate(`/frame`, { state: { selectedPhotos, selectedFrame } });
 		} else {
-			alert("4개의 사진을 선택해주세요.");
+			toast.error("4개의 사진을 선택해주세요.");
 		}
 	};
 
