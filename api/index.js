@@ -1,7 +1,7 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const { createClient } = require("@supabase/supabase-js");
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { createClient } from "@supabase/supabase-js";
 
 const app = express();
 
@@ -16,4 +16,4 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-module.exports = { app, supabase }; // app과 supabase export
+export { app, supabase }; // app과 supabase를 export

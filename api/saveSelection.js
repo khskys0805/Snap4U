@@ -1,4 +1,4 @@
-const { app, supabase } = require("./index");
+import { app, supabase } from "./index.js";
 
 const uploadImageToSupabase = async (base64Data, fileName) => {
 	const base64String = base64Data.replace(
