@@ -16,4 +16,4 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-module.exports = { app, supabase };
+module.exports = { app, supabase }; // app과 supabase export
