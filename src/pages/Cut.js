@@ -5,24 +5,37 @@ import Frame2 from "../Components/Frame2.js";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "blue"};
-	width: 900px;
+	width: 90%;
+	max-width: 900px;
 	height: 100%;
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+
+	@media (max-width: 599px) {
+		width: 96%;
+	}
 `;
 
 const Title = styled.h2`
-	font-size: 25px;
+	font-size: clamp(22px, 4vw, 25px);
 	margin-bottom: 50px;
+	text-align: center;
 `;
 
 const Grids = styled.div`
 	display: flex;
+	margin: 0 auto;
+
 	& > *:not(:last-child) {
 		margin-right: 40px;
+	}
+	@media (max-width: 600px) {
+		& > *:not(:last-child) {
+			margin-right: 0;
+		}
 	}
 `;
 

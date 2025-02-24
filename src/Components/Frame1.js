@@ -2,6 +2,21 @@ import styled from "styled-components";
 import logo1 from "../imgs/logo.png";
 import logo2 from "../imgs/logo2.png";
 
+const Container = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: transform 0.3s ease-in-out;
+
+	@media (max-width: 899px) {
+		transform: scale(0.85);
+	}
+
+	@media (max-width: 599px) {
+		transform: scale(0.65);
+	}
+`;
+
 const Grid1 = styled.div`
 	width: 180px;
 	height: 500px;
@@ -9,11 +24,6 @@ const Grid1 = styled.div`
 	transition: box-shadow 500ms ease-in-out;
 	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
 	cursor: pointer;
-
-	/* hover 스타일을 prop에 따라 조정 */
-	&:hover {
-		${(props) => !props.disableHover && `transform: scale(1.05);`}
-	}
 `;
 
 const GridItem1 = styled.div`
@@ -37,26 +47,28 @@ const Logo = styled.img.attrs(({ color }) => ({
 const Frame1 = ({ handleChooseCut, disableHover, color, selectedPhotos }) => {
 	const gridItems = Array(4).fill(null);
 
-	// selectedPhotos가 있을 때만 각 그리드에 사진을 채워 넣음
 	if (selectedPhotos && selectedPhotos.length > 0) {
 		selectedPhotos.forEach((photo, index) => {
 			if (index < 4) {
-				gridItems[index] = photo; // 최대 4개만 그리드에 표시
+				gridItems[index] = photo;
 			}
 		});
 	}
 
 	return (
-		<Grid1
-			onClick={handleChooseCut}
-			disableHover={disableHover}
-			color={color}
-		>
-			{gridItems.map((photo, index) => (
-				<GridItem1 key={index} photo={photo} />
-			))}
-			<Logo color={color} />
-		</Grid1>
+		<Container>
+			<Grid1
+				onClick={handleChooseCut}
+				disableHover={disableHover}
+				color={color}
+			>
+				{gridItems.map((photo, index) => (
+					<GridItem1 key={index} photo={photo} />
+				))}
+				<Logo color={color} />
+			</Grid1>
+		</Container>
 	);
 };
+
 export default Frame1;
