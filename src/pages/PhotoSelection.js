@@ -12,6 +12,11 @@ import { toast } from "react-hot-toast";
 const Title = styled.h2`
 	font-size: 25px;
 	margin-bottom: 50px;
+
+	@media (max-width: 730px) {
+		font-size: 20px;
+		margin-top: 30px;
+	}
 `;
 
 const Button = styled.button`
@@ -27,6 +32,14 @@ const Button = styled.button`
 	height: 65px;
 	cursor: pointer;
 	border-radius: 50%;
+
+	@media (max-width: 550px) {
+		margin-top: 40px;
+	}
+
+	@media (max-width: 899px) {
+		margin-top: 40px;
+	}
 `;
 
 const Container = styled.div`
@@ -44,6 +57,24 @@ const PhotoGrid = styled.div`
 	gap: ${(props) => (props.frameType === "Frame2" ? "25px" : "10px")};
 	margin: 20px 0;
 	padding: ${(props) => (props.frameType === "Frame2" ? "0 250px" : "0")};
+
+	@media (max-width: 899px) {
+		grid-template-columns: repeat(4, 1fr);
+		margin: 0 50px;
+	}
+	@media (max-width: 730px) {
+		grid-template-columns: repeat(3, 1fr);
+		margin: 0 50px;
+	}
+
+	@media (max-width: 550px) {
+		grid-template-columns: repeat(
+			2,
+			1fr
+		); /* 599px 이하에서 2개씩 보여주기 */
+		grid-template-rows: repeat(5, 1fr); /* 세로로 5개 */
+		margin: 0 100px;
+	}
 `;
 
 const Thumbnail = styled.div`
@@ -88,6 +119,16 @@ const CheckIcon = styled.div`
 	opacity: ${(props) => (props.selected ? 1 : 0)};
 	transition: opacity 0.3s ease;
 	z-index: 2;
+
+	@media (max-width: 550px) {
+		font-size: 25px;
+	}
+	@media (max-width: 730px) {
+		font-size: 30px;
+	}
+	@media (max-width: 899px) {
+		font-size: 35px;
+	}
 `;
 
 const PhotoSelection = ({ photos }) => {

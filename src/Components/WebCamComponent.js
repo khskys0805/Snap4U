@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import cameraClickSound from "../sounds/camera-click.mp3";
 import { toast } from "react-hot-toast";
 
+// frame1과 frame2 비율에 맞는 videoConstraints 설정
 const frame1VideoConstraints = {
 	width: 1920,
 	height: 1080,
@@ -31,6 +32,16 @@ const Button = styled.button`
 	padding: 20px;
 	cursor: pointer;
 	border-radius: 50%;
+
+	@media (max-width: 899px) {
+		padding: 15px;
+		font-size: 14px;
+	}
+
+	@media (max-width: 599px) {
+		padding: 10px;
+		font-size: 12px;
+	}
 `;
 
 const Container = styled.div`
@@ -45,6 +56,25 @@ const Container = styled.div`
 const Counter = styled.div`
 	font-size: 18px;
 	color: #000;
+
+	@media (max-width: 899px) {
+		font-size: 16px;
+	}
+
+	@media (max-width: 599px) {
+		font-size: 14px;
+	}
+`;
+
+const WebcamWrapper = styled.div`
+	width: 100%;
+	max-width: 850px; /* 최대 너비 설정 */
+	margin: 0 auto;
+	transform: scaleX(-1);
+
+	@media (max-width: 899px) {
+		width: 90%; /* 화면 크기에 맞게 크기 조정 */
+	}
 `;
 
 const WebCamComponent = ({ setPhotos }) => {
@@ -55,7 +85,6 @@ const WebCamComponent = ({ setPhotos }) => {
 
 	const location = useLocation();
 	const { selectedFrame } = location.state || {}; // state가 없으면 기본값으로 빈 객체를 사용
-	console.log(selectedFrame);
 
 	const capturePhoto = () => {
 		const screenshot = webcamRef.current.getScreenshot();
@@ -76,26 +105,28 @@ const WebCamComponent = ({ setPhotos }) => {
 	return (
 		<Container>
 			{selectedFrame === "Frame1" && (
-				<Webcam
-					audio={false}
-					height={510}
-					screenshotFormat="image/jpeg"
-					width={850}
-					videoConstraints={frame1VideoConstraints}
-					style={{ transform: "scaleX(-1)" }}
-					ref={webcamRef}
-				/>
+				<WebcamWrapper>
+					<Webcam
+						audio={false}
+						height={510}
+						screenshotFormat="image/jpeg"
+						width="100%" /* 부모 요소에 맞게 크기 조정 */
+						videoConstraints={frame1VideoConstraints}
+						ref={webcamRef}
+					/>
+				</WebcamWrapper>
 			)}
 			{selectedFrame === "Frame2" && (
-				<Webcam
-					audio={false}
-					height={500}
-					screenshotFormat="image/jpeg"
-					width={(35 / 39) * 500}
-					videoConstraints={frame2VideoConstraints}
-					style={{ transform: "scaleX(-1)" }}
-					ref={webcamRef}
-				/>
+				<WebcamWrapper>
+					<Webcam
+						audio={false}
+						height={500}
+						screenshotFormat="image/jpeg"
+						width="100%" /* 부모 요소에 맞게 크기 조정 */
+						videoConstraints={frame2VideoConstraints}
+						ref={webcamRef}
+					/>
+				</WebcamWrapper>
 			)}
 
 			<Button

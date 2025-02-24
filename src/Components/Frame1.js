@@ -24,6 +24,10 @@ const Grid1 = styled.div`
 	transition: box-shadow 500ms ease-in-out;
 	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
 	cursor: pointer;
+
+	&:hover {
+		${(props) => !props.disableHover && `transform: scale(1.05);`}
+	}
 `;
 
 const GridItem1 = styled.div`
