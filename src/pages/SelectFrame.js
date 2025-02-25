@@ -10,18 +10,27 @@ import { toast } from "react-hot-toast";
 
 const Box = styled.div`
 	background: ${(props) => props.color || "#fff"};
-	width: 900px;
+	width: 90%;
+	max-width: 900px;
 	min-height: 100vh;
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	text-align: center;
 `;
 
 const Title = styled.h1`
 	font-size: 25px;
 	margin-bottom: 30px;
+
+	@media (max-width: 599px) {
+		margin: 40px 0 0 0;
+	}
+	@media (max-width: 899px) {
+		margin: 20px 0 0 0;
+	}
 `;
 
 const Layout = styled.div`
@@ -30,19 +39,47 @@ const Layout = styled.div`
 `;
 
 const Palette = styled.div`
-	margin-right: 80px;
+	margin-right: ${(props) =>
+		props.frameType === "Frame2" ? "20px" : "80px"};
+
+	@media (max-width: 899px) {
+		margin-left: ${(props) => props.frameType === "Frame2" && "5%"};
+	}
+	@media (max-width: 670px) {
+		margin-left: ${(props) => props.frameType === "Frame2" && "7%"};
+	}
+	@media (max-width: 599px) {
+		margin-right: 20px;
+		transform: scale(0.85);
+		margin-left: ${(props) => props.frameType === "Frame2" && "12%"};
+	}
 `;
 
 const ColorLayout = styled.div`
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 20px;
+	margin-bottom: 30px;
+
+	@media (max-width: 899px) {
+		grid-template-columns: repeat(4, 1fr);
+	}
+
+	@media (max-width: 730px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	@media (max-width: 599px) {
+		grid-template-columns: repeat(2, 1fr); /* 2개씩 정렬 */
+		grid-template-rows: repeat(5, 1fr); /* 5개 행으로 설정 */
+		margin-bottom: 0;
+	}
 `;
 
 const Color = styled.div`
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
-	margin: 0 20px 20px 0;
 	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
 	background: ${(props) => props.color || "#fff"};
 	transition: background 1s ease;
@@ -259,21 +296,9 @@ const SelectFrame = () => {
 		<Box>
 			<Title>프레임을 선택해주세요.</Title>
 			<Layout>
-				<Palette>
+				<Palette frameType={selectedFrame}>
 					<ColorLayout>
-						{colors.slice(0, 5).map((color, index) => (
-							<Color
-								key={index}
-								color={color}
-								isSelected={selectColor === color}
-								onClick={() => handleSelectColor(color)}
-							>
-								<FaCheck />
-							</Color>
-						))}
-					</ColorLayout>
-					<ColorLayout>
-						{colors.slice(5, 10).map((color, index) => (
+						{colors.map((color, index) => (
 							<Color
 								key={index}
 								color={color}

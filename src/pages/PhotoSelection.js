@@ -56,24 +56,45 @@ const PhotoGrid = styled.div`
 	grid-template-columns: repeat(5, 1fr);
 	gap: ${(props) => (props.frameType === "Frame2" ? "25px" : "10px")};
 	margin: 20px 0;
-	padding: ${(props) => (props.frameType === "Frame2" ? "0 250px" : "0")};
+	padding: ${(props) => (props.frameType === "Frame2" ? "0 15%" : "0")};
 
+	@media (max-width: 1290px) {
+		${(props) => props.frameType === "Frame2" && `padding:0 10%;`};
+	}
+	@media (max-width: 1080px) {
+		${(props) => props.frameType === "Frame2" && `padding:0;`};
+	}
 	@media (max-width: 899px) {
-		grid-template-columns: repeat(4, 1fr);
+		${(props) =>
+			props.frameType === "Frame1"
+				? `grid-template-columns: repeat(4, 1fr);
 		margin: 0 50px;
+		`
+				: `padding:0;margin:0;`}
 	}
 	@media (max-width: 730px) {
-		grid-template-columns: repeat(3, 1fr);
-		margin: 0 50px;
+		${(props) =>
+			props.frameType === "Frame1"
+				? `grid-template-columns: repeat(3, 1fr);
+		margin: 0 50px;`
+				: `grid-template-columns: repeat(5, 1fr);`}
 	}
 
+	@media (max-width: 536px) {
+		${(props) =>
+			props.frameType === "Frame2" &&
+			`
+			grid-template-columns: repeat(5, 1fr);
+		`}
+	}
 	@media (max-width: 550px) {
-		grid-template-columns: repeat(
-			2,
-			1fr
-		); /* 599px 이하에서 2개씩 보여주기 */
-		grid-template-rows: repeat(5, 1fr); /* 세로로 5개 */
-		margin: 0 100px;
+		${(props) =>
+			props.frameType === "Frame2" &&
+			`
+			grid-template-columns: repeat(4, 1fr); /* 599px 이하에서 2개씩 보여주기 */
+			// margin: 0 100px;
+			padding:0;
+		`}
 	}
 `;
 
