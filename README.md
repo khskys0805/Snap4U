@@ -22,11 +22,11 @@
 
 #### 🏠 홈 화면
 
-![alt text](image.png)
+![alt text](./src/imgs/capture/image.png)
 
 #### 🤚 컷 선택 화면
 
-![alt text](image-1.png)
+![alt text](./src/imgs/capture/image-1.png)
 
 #### 📸 사진 촬영 화면
 
