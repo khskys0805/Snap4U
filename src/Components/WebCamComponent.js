@@ -21,6 +21,9 @@ const frame2VideoConstraints = {
 };
 
 const Button = styled.button`
+	width: 65px;
+	height: 65px;
+	line-height: 16px;
 	background-color: #000;
 	border: none;
 	color: white;
@@ -29,7 +32,6 @@ const Button = styled.button`
 	display: inline-block;
 	font-size: 16px;
 	margin: 20px auto;
-	padding: 20px;
 	cursor: pointer;
 	border-radius: 50%;
 

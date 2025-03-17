@@ -59,7 +59,7 @@ const ColorLayout = styled.div`
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	gap: 20px;
-	margin-bottom: 30px;
+	// margin-bottom: 30px;
 
 	@media (max-width: 899px) {
 		grid-template-columns: repeat(4, 1fr);
